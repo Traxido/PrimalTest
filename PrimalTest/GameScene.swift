@@ -31,15 +31,37 @@ class GameScene: SKScene {
         man2.position = CGPoint(x: self.frame.width / 3, y: self.frame.height / 3)
         man3.position = CGPoint(x: self.frame.width / 1.5, y: self.frame.height / 1.5)
         
-        self.randomTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(doSomethingRandom), userInfo: nil, repeats: true)
+        let randomTime = Int(arc4random_uniform(3))
+        self.randomTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(doSomethingRandom), userInfo: nil, repeats: true)
     }
     
     @objc func doSomethingRandom() {
         let rand = Int(arc4random_uniform(UInt32(men.count)))
-        let movementX = Int(arc4random_uniform(UInt32(self.frame.width-50)))
-        let movementY = Int(arc4random_uniform(UInt32(self.frame.height-50)))
-        let chosenSprite = men[rand]
-        moveman(location: CGPoint(x: movementX, y: movementY), sprite: chosenSprite)
+        for i in 0...rand {
+            let randomGuyMoving = men[i]
+            let chosenSprite = randomGuyMoving
+            let randomXadd = Int(arc4random_uniform(50))
+            let randomYadd = Int(arc4random_uniform(50))
+            let addOrSubtractX = Int(arc4random_uniform(2))
+            let addOrSubtractY = Int(arc4random_uniform(2))
+            
+            var movementX = CGFloat()
+            var movementY = CGFloat()
+            
+            if addOrSubtractX == 1 {
+                movementX = chosenSprite.position.x - CGFloat(randomXadd)
+            } else {
+                movementX = chosenSprite.position.x + CGFloat(randomXadd)
+            }
+            
+            if addOrSubtractY == 1 {
+                movementY = chosenSprite.position.y - CGFloat(randomYadd)
+            } else {
+                movementY = chosenSprite.position.y + CGFloat(randomYadd)
+            }
+            
+            moveman(location: CGPoint(x: movementX, y: movementY), sprite: chosenSprite)
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
